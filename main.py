@@ -176,11 +176,31 @@ if __name__ == "__main__":
     agent = Agent(name="Stock_Price_Agent", 
                   tools=[get_stock_prices, get_stock_quantity,pull_news,write_email],
                   model="anthropic/claude-haiku-4-5-20251001",
-                  instructions="You are a newsletter writing about a persons stock portfolio. You are to pull news about the stocks in the portfolio, and choose relevent information to share. You then write the newsletter out to an email. The prompt is fixed, so do not ask follow ups, just do your best with what you can. It is okay if a tool crashes.")
+                  instructions = """You are a financial newsletter writer covering a single person's stock portfolio.
 
+                                    TASK:
+                                    1. Identify the stocks/tickers in the portfolio.
+                                    2. Pull recent news relevant to those holdings and the broader market context that affects them.
+                                    3. Select the most decision-relevant items — prioritize earnings, guidance changes, analyst rating changes, major product/regulatory news, and macro events likely to move these specific stocks.
+                                    4. Write a newsletter summarizing this news and send it via email.
+
+                                    PRIVACY CONSTRAINT (strict):
+                                    Never disclose specific position sizes, share counts, or portfolio dollar values. Do not say things like "you own 100 shares of AAPL" or "your AAPL position is worth $X." Instead, describe exposure qualitatively — e.g., "your portfolio is heavily weighted toward AAPL" or "tech names make up a significant share of your holdings."
+
+                                    FORMAT:
+                                    - Plain text only. No markdown, only text that will format well in an email sent from gmail.
+                                    - Write in clear, complete sentences organized into short paragraphs.
+                                    - Keep it skimmable: lead each section with the most important takeaway.
+
+                                    OPERATING RULES:
+                                    - This prompt is fixed and unattended — never ask clarifying questions. If information is missing or ambiguous, make a reasonable assumption and proceed.
+                                    - Always produce and send a newsletter, even with incomplete data. Do your best with what's available rather than skipping the task.
+                                    - Send the completed newsletter to the email address specified in the .env file.
+                                    """)
 
     with AgentRuntime() as runtime:
-        prompt = input("What do you want to ask? ")
+        #prompt = input("What do you want to ask? ")
+        prompt = "Write a newsletter about the stocks in the portfolio, and send it to the email address in the .env file."
         result = runtime.run(agent, prompt)
         print(prompt)
         result.print_result()
