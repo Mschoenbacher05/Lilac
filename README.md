@@ -1,3 +1,5 @@
+# Welcome to the Lilac Agent--Your personal portfolio news assistant
+
 # Purpose of this agent
 First and foremost I am doing this to learn about agentic AI workflows and how to build agents in python. As the business landscape progressively moves toward agentic workflows, I belive understanding safe implementation of them is vital. While this agent may not seem all that different from a normal chat with an LLM, I am doing this to showcase the principles that building agents in python promotes.
 
